@@ -28,11 +28,11 @@ module.exports = function(ctx) {
     'utf-8',
     function(err, data) {
       if (err) {
-        return deferral.reject('CordovaBlinkUp Plugin: Read file operation failed for ' + mainActivityPath);
+        return deferral.reject('BlinkUp Plugin: Read file operation failed for ' + mainActivityPath);
       }
 
       if (data.indexOf(replaceString1) !== -1) {
-        console.log('CordovaBlinkUp Plugin: MainActivity already injected.');
+        console.log('BlinkUp Plugin: MainActivity already injected.');
         return deferral.resolve();
       }
 
@@ -45,7 +45,7 @@ module.exports = function(ctx) {
           if (err) {
             return deferral.reject('Write file operation failed');
           }
-          console.log('CordovaBlinkUp Plugin: MainActivity injection successfullly');
+          console.log('BlinkUp Plugin: MainActivity injection successfullly');
           deferral.resolve();
         });
     });

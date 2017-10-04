@@ -16,11 +16,11 @@ module.exports = function(ctx) {
     'utf-8',
     function(err, data) {
       if (err) {
-        return deferral.reject('CordovaBlinkUp Plugin: Read file operation failed for ' + manifestPath);
+        return deferral.reject('BlinkUp Plugin: Read file operation failed for ' + manifestPath);
       }
 
       if (data.indexOf(jsonFile.addPermissions[0]) !== -1) {
-        console.log('CordovaBlinkUp Plugin: AndroidManifest already injected');
+        console.log('BlinkUp Plugin: AndroidManifest already injected');
         return deferral.resolve();
       }
 
@@ -31,7 +31,7 @@ module.exports = function(ctx) {
         if (err) {
           return deferral.reject('Write file operation failed');
         }
-        console.log('CordovaBlinkUp Plugin: AndroidManifest injected successfullly');
+        console.log('BlinkUp Plugin: AndroidManifest injected successfullly');
         deferral.resolve();
       });
   });

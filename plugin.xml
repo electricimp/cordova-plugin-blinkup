@@ -11,8 +11,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 
- Created by Stuart Douglas (sdouglas@macadamian.com) on June 11, 2015.
- Copyright (c) 2015 Macadamian. All rights reserved.
+ Created by Paulo Vitor Magacho (developer@sensorshare.com) on October 04, 2017.
+ Copyright (c) 2017 Sensorshare LLC. All rights reserved.
 -->
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
@@ -36,7 +36,7 @@
     </js-module>
 
     <platform name="android">
-      
+
       <!-- Application specific permission injections -->
       <hook type="after_platform_add" src="scripts/android/manifest_permission_inject.js" />
       <hook type="after_plugin_add" src="scripts/android/manifest_permission_inject.js" />
