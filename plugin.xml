@@ -46,7 +46,7 @@
       <hook type="after_plugin_add" src="scripts/android/blinkup/main_activity_inject.js" />
 
       <config-file target="res/xml/config.xml" parent="/*">
-        <feature name="cordova-blinkup-plugin">
+        <feature name="Blinkup">
           <param name="android-package" value="com.sensorshare.blinkup.BlinkUpPlugin" />
         </feature>
       </config-file>
@@ -82,7 +82,7 @@
     <platform name="ios">
 
       <config-file target="config.xml" parent="/*">
-        <feature name="cordova-plugin-blinkup">
+        <feature name="Blinkup">
             <param name="ios-package" value="BlinkUpPlugin" />
         </feature>
         <preference name="DisallowOverscroll" value="true" />
