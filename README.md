@@ -3,7 +3,7 @@ Introduction
 
 This Cordova / Phonegap plugin allows you to easily integrate the native BlinkUp process to connect an Electric Imp device to the internet in your app. Note that because the BlinkUp SDK is private, you will need to add it to your project after installing the plugin. If you do not have access to the BlinkUp SDK, you may contact Electric Imp at sales@electricimp.com.
 
-Integrate your application with this plugin directly from the command line using `cordova plugin add cordova-blinkup-plugin`.
+Integrate your application with this plugin directly from the command line using `cordova plugin add cordova-plugin-blinkup`.
 
 A sample Cordova app that demonstrates how to integrate the plugin can be found at https://github.com/Macadamian/Cordova-BlinkUpSample.
 
@@ -23,15 +23,15 @@ A sample Cordova app that demonstrates how to integrate the plugin can be found 
 
 Installation
 ==============
-Navigate to your project directory and install the plugin with `cordova plugin add https://github.com/Macadamian/Cordova-BlinkUpPlugin.git`. Add both platforms if you haven't already with `cordova platform add ios` and `cordova platform add android`.
+Navigate to your project directory and install the plugin with `cordova plugin add cordova-plugin-blinkup`. Add both platforms if you haven't already with `cordova platform add ios` and `cordova platform add android`.
 
 iOS
 --------------
 **REQUIREMENTS**<br>
-* XCode 7
+* XCode 8+
 
 **STEP 1**<br>
-Open `/path/to/project/platforms/ios/<ProjectName>.xcodeproj` in Xcode, select the "Frameworks" group and choose File > Add Files to \<ProjectName\>. Select the `BlinkUp.embeddedframework` file given to you by Electric Imp, and ensure that both "*Copy items if needed*" and "*Add to targets: \<ProjectName\>*" are selected. 
+Open `/path/to/project/platforms/ios/<ProjectName>.xcworkspace` in Xcode, select the "Frameworks" group and choose File > Add Files to \<ProjectName\>. Select the `BlinkUp.embeddedframework` file given to you by Electric Imp, and ensure that both "*Copy items if needed*" and "*Add to targets: \<ProjectName\>*" are selected.
 
 Expand the `BlinkUp.embeddedframework` you just added to Frameworks, and drag the `BlinkUp.framework` file  to `Link Binary with Libraries`, and `BlinkUp.bundle` (in BlinkUp.embeddedframework/Resources) to the `Copy Bundle Resources` in the project's `Build Phases`.
 
@@ -56,7 +56,7 @@ When you are adding calls to the plugin in your javascript note that you must up
 
 API Calls
 ----------
-There are three calls from the plugin exposed to the javascript through the `blinkup` interface. For example, to show a BlinkUp you would call `blinkup.startBlinkUp(...);`. 
+There are three calls from the plugin exposed to the javascript through the `blinkup` interface. For example, to show a BlinkUp you would call `blinkup.startBlinkUp(...);`.
 
 All calls take success and failure callbacks as arguments. See the "Callbacks" section below for more information.
 
@@ -68,7 +68,7 @@ Presents the native BlinkUp interface, where user can input wifi info and connec
 `timeoutMs` *integer, default=30000*: how long to wait for device info from servers.<br>
 
 **abortBlinkUp(success, failure)**<br>
-Cancels server polling for device info if in progress. 
+Cancels server polling for device info if in progress.
 
 **clearBlinkUpData(success, failure)**<br>
 Immediately initiates the BlinkUp flashing process that will clear the imp's wifi info. Also clears the cached planId if there is one.
@@ -81,8 +81,8 @@ An example callback function is below, where `errorForCode` and `statusForCode` 
 ```javascript
 var callback = function (message) {
     try {
-        var jsonData = JSON.parse("(" + message + ")"); 
-        
+        var jsonData = JSON.parse("(" + message + ")");
+
         if (jsonData.state == "error") {
             if (jsonData.error.errorType == "blinkup") {
                 var statusMsg = jsonData.error.errorMsg;
@@ -98,9 +98,9 @@ var callback = function (message) {
                 var verificationDate = jsonData.deviceInfo.verificationDate;
             }
         }
-        
+
         // update ui here
-        
+
         if (jsonData.state == "started") {
             // show progress indicator and abort button
         } else {
@@ -166,7 +166,7 @@ IMPORTANT NOTE: the following codes apply ONLY if `errorType` is "plugin". Error
 100 - "Invalid arguments in call to startBlinkUp."
 101 - "Could not gather device info. Process timed out."
 102 - "Process cancelled by user."
-103 - "Invalid API key. You must set your BlinkUp API key in index.js." 
+103 - "Invalid API key. You must set your BlinkUp API key in index.js."
 301 - "Could not verify API key with Electric Imp servers."
 302 - "Error generating JSON string."
 ```
