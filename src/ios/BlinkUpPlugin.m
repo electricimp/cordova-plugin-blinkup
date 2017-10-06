@@ -97,7 +97,33 @@ typedef NS_ENUM(NSInteger, InvokeBlinkupArguments) {
 
         NSLog(@"invokeBlinkUp with timeoutMS: %ld", (long)_timeoutMs);
 
-        [self navigateToBlinkUpView];
+        BUNetworkConfig *networkConfig = [[BUWifiConfig alloc] initWithSSID:@"H_S_H" password:@"LEGION00"];
+
+        _configId = [[BUConfigId alloc] initWithApiKey:_apiKey completionHandler:^(BUConfigId *configId, NSError *error) {
+            if (error != nil) {
+                BlinkUpPluginResult *pluginResult = [[BlinkUpPluginResult alloc] init];
+                pluginResult.state = Error;
+
+                [pluginResult setPluginError:INVALID_API_KEY];
+
+                [self sendResultToCallback:pluginResult];
+
+                return;
+            }
+
+            if(_flashController == nil) {
+                _flashController = [[BUFlashController alloc] init];
+            } else if(_blinkUpController != nil) {
+                _flashController = _blinkUpController.flashController;
+            }
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                // present the clear device flashing screen
+                [_flashController presentFlashWithNetworkConfig:networkConfig configId:_configId animated:YES resignActive:^(BOOL willRespond, BUDevicePoller *devicePoller, NSError *error) {
+                    [self blinkUpDidComplete:false userDidCancel:false error:nil clearedCache:true];
+                }];
+            });
+        }];
     }];
 }
 
