@@ -20,6 +20,7 @@
 
 @class BUBasicController;
 @class BUFlashController;
+@class BUConfigId;
 
 @interface BlinkUpPlugin : CDVPlugin
 
@@ -37,6 +38,7 @@
 @property (strong) NSString *apiKey;
 @property (strong) NSString *callbackId;
 @property (strong) NSString *developerPlanId;
+@property (strong) BUConfigId *configId;
 @property NSInteger timeoutMs;
 @property BOOL isInDevelopment;
 
