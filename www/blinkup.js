@@ -55,4 +55,4 @@ Blinkup.prototype.clearBlinkUpData = function (successCallback, errorCallback) {
   exec(successCallback, errorCallback, "Blinkup", "clearBlinkUpData", []);
 };
 
-module.exports = Blinkup;
+module.exports = new Blinkup();
