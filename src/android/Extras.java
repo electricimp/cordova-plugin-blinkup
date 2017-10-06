@@ -1,4 +1,4 @@
-package com.macadamian.blinkup;
+package com.sensorshare.blinkup;
 
 public class Extras {
     public static final String EXTRA_DEVELOPER_PLAN_ID = "Extra.DeveloperPlanId";

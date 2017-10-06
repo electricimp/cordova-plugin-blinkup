@@ -15,7 +15,8 @@
  * Copyright (c) 2015 Macadamian. All rights reserved.
  */
 
-package com.macadamian.blinkup;
+
+package com.sensorshare.blinkup;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -23,7 +24,7 @@ import android.text.TextUtils;
 
 import com.electricimp.blinkup.BlinkupController;
 import com.electricimp.blinkup.TokenStatusCallback;
-import com.macadamian.blinkup.util.PreferencesHelper;
+import com.sensorshare.blinkup.util.PreferencesHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -37,21 +37,21 @@ typedef NS_ENUM(NSInteger, BlinkUpErrorCodes) {
     INVALID_API_KEY     = 103
 };
 
-typedef NS_ENUM(NSInteger, StartBlinkupArguments) {
+typedef NS_ENUM(NSInteger, StartBlinkUpArguments) {
     StartBlinkUpArgumentApiKey = 0,
     StartBlinkUpArgumentDeveloperPlanId,
     StartBlinkUpArgumentIsInDevelopment,
     StartBlinkUpArgumentTimeOut,
 };
 
-typedef NS_ENUM(NSInteger, WifiBlinkupArguments) {
+typedef NS_ENUM(NSInteger, WifiBlinkUpArguments) {
     WifiBlinkUpArgumentApiKey = 0,
     WifiBlinkUpArgumentTimeOut,
     WifiBlinkUpArgumentSsid,
     WifiBlinkUpArgumentPassword
 };
 
-typedef NS_ENUM(NSInteger, WPSBlinkupArguments) {
+typedef NS_ENUM(NSInteger, WPSBlinkUpArguments) {
     WPSBlinkUpArgumentApiKey = 0,
     WPSBlinkUpArgumentTimeOut,
     WPSBlinkUpArgumentPin
@@ -86,8 +86,8 @@ typedef NS_ENUM(NSInteger, WPSBlinkupArguments) {
 /*********************************************************
  * Parses arguments from javascript and displays BlinkUp
  ********************************************************/
-- (void)flashWifiBlinkup:(CDVInvokedUrlCommand*)command {
-    NSLog(@"flashWifiBlinkup Started.");
+- (void)flashWifiBlinkUp:(CDVInvokedUrlCommand*)command {
+    NSLog(@"flashWifiBlinkUp Started.");
 
     _callbackId = command.callbackId;
 
@@ -101,7 +101,7 @@ typedef NS_ENUM(NSInteger, WPSBlinkupArguments) {
             return;
         }
 
-        NSLog(@"flashWifiBlinkup with timeoutMS: %ld", (long)_timeoutMs);
+        NSLog(@"flashWifiBlinkUp with timeoutMS: %ld", (long)_timeoutMs);
 
         [self showFlashWifiView];
     }];
@@ -110,8 +110,8 @@ typedef NS_ENUM(NSInteger, WPSBlinkupArguments) {
 /*********************************************************
  * Parses arguments from javascript and displays BlinkUp
  ********************************************************/
-- (void)flashWPSBlinkup:(CDVInvokedUrlCommand*)command {
-    NSLog(@"flashWPSBlinkup Started.");
+- (void)flashWPSBlinkUp:(CDVInvokedUrlCommand*)command {
+    NSLog(@"flashWPSBlinkUp Started.");
 
     _callbackId = command.callbackId;
 
@@ -124,7 +124,7 @@ typedef NS_ENUM(NSInteger, WPSBlinkupArguments) {
             return;
         }
 
-        NSLog(@"flashWPSBlinkup with timeoutMS: %ld", (long)_timeoutMs);
+        NSLog(@"flashWPSBlinkUp with timeoutMS: %ld", (long)_timeoutMs);
 
         [self showFlashWPSView];
     }];

@@ -1,4 +1,4 @@
-package com.macadamian.blinkup.util;
+package com.sensorshare.blinkup.util;
 
 
 import org.apache.cordova.BuildConfig;

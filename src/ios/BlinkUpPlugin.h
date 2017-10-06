@@ -29,8 +29,8 @@
 // perform the screen flash process to connect to an Imp
 //------------------------------------------------------
 - (void)startBlinkUp:(CDVInvokedUrlCommand *)command;
-- (void)flashWifiBlinkup:(CDVInvokedUrlCommand *)command;
-- (void)flashWPSBlinkup:(CDVInvokedUrlCommand *)command;
+- (void)flashWifiBlinkUp:(CDVInvokedUrlCommand *)command;
+- (void)flashWPSBlinkUp:(CDVInvokedUrlCommand *)command;
 - (void)abortBlinkUp:(CDVInvokedUrlCommand *)command;
 - (void)clearBlinkUpData:(CDVInvokedUrlCommand *)command;
 

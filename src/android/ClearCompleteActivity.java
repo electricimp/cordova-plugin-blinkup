@@ -15,7 +15,7 @@
  * Copyright (c) 2015 Macadamian. All rights reserved.
  */
 
-package com.macadamian.blinkup;
+package com.sensorshare.blinkup;
 
 import android.app.Activity;
 import android.os.Bundle;

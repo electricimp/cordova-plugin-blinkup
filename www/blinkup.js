@@ -2,18 +2,18 @@ var argscheck = require('cordova/argscheck'),
     utils = require('cordova/utils'),
     exec = require('cordova/exec');
 
-var Blinkup = function() {
-  this.name = "Blinkup";
+var BlinkUp = function() {
+  this.name = "BlinkUp";
 };
 
 /**
- * startBlinkUp - starts the blinkup process
+ * startBlinkUp - starts the blink up process
  * @param {module:blinkup.onSuccess} successCallback
  * @param {module:blinkup.onError} errorCallback
- * @param {module:blinkup.BlinkupOptions} options Blinkup Options
+ * @param {module:blinkup.BlinkUpOptions} options BlinkUp Options
  */
-Blinkup.prototype.startBlinkUp = function (successCallback, errorCallback, options) {
-  argscheck.checkArgs('fFO', 'Blinkup.startBlinkUp', arguments);
+BlinkUp.prototype.startBlinkUp = function (successCallback, errorCallback, options) {
+  argscheck.checkArgs('fFO', 'BlinkUp.startBlinkUp', arguments);
   options = options || {};
   var getValue = argscheck.getValue;
 
@@ -21,17 +21,17 @@ Blinkup.prototype.startBlinkUp = function (successCallback, errorCallback, optio
   var developerPlanId = getValue(options.developerPlanId, "");
   var isInDevelopment = !!options.isInDevelopment;
   var timeoutMs = getValue(options.timeoutMs, 30000);
-  exec(successCallback, errorCallback, "Blinkup", "startBlinkUp", [apiKey, developerPlanId, isInDevelopment, timeoutMs]);
+  exec(successCallback, errorCallback, "BlinkUp", "startBlinkUp", [apiKey, developerPlanId, isInDevelopment, timeoutMs]);
 };
 
 /**
- * flashWifiBlinkup - invoke flash controller for wifi
- * @param {module:blinkup.onSuccess} successCallback
+ * flashWifiBlinkUp - invoke flash controller for wifi
+ * @param {module:blinup.onSuccess} successCallback
  * @param {module:blinkup.onError} errorCallback
- * @param {module:blinkup.BlinkupOptions} options Blinkup Options
+ * @param {module:blinkup.BlinkUpWifiOptions} options BlinkUp Wifi Options
  */
-Blinkup.prototype.flashWifiBlinkup = function (successCallback, errorCallback, options) {
-  argscheck.checkArgs('fFO', 'Blinkup.flashWifiBlinkup', arguments);
+BlinkUp.prototype.flashWifiBlinkUp = function (successCallback, errorCallback, options) {
+  argscheck.checkArgs('fFO', 'BlinkUp.flashWifiBlinkUp', arguments);
   options = options || {};
   var getValue = argscheck.getValue;
 
@@ -39,34 +39,34 @@ Blinkup.prototype.flashWifiBlinkup = function (successCallback, errorCallback, o
   var timeoutMs = getValue(options.timeoutMs, 30000);
   var ssid = getValue(options.ssid, '');
   var password = getValue(options.password, '');
-  exec(successCallback, errorCallback, "Blinkup", "flashWifiBlinkup", [apiKey, timeoutMs, ssid, password]);
+  exec(successCallback, errorCallback, "BlinkUp", "flashWifiBlinkUp", [apiKey, timeoutMs, ssid, password]);
 };
 
 /**
- * flashWifiBlinkup - invoke flash controller for wps
+ * flashWPSBlinkUp - invoke flash controller for wps
  * @param {module:blinkup.onSuccess} successCallback
  * @param {module:blinkup.onError} errorCallback
- * @param {module:blinkup.BlinkupOptions} options Blinkup Options
+ * @param {module:blinkup.BlinkUpWPSOptions} options Blinkup WPS Options
  */
-Blinkup.prototype.flashWPSBlinkup = function (successCallback, errorCallback, options) {
-  argscheck.checkArgs('fFO', 'Blinkup.flashWPSBlinkup', arguments);
+BlinkUp.prototype.flashWPSBlinkUp = function (successCallback, errorCallback, options) {
+  argscheck.checkArgs('fFO', 'BlinkUp.flashWPSBlinkUp', arguments);
   options = options || {};
   var getValue = argscheck.getValue;
 
   var apiKey = getValue(options.apiKey, '');
   var timeoutMs = getValue(options.timeoutMs, 30000);
   var wpsPin = getValue(options.wpsPin, '');
-  exec(successCallback, errorCallback, "Blinkup", "flashWPSBlinkup", [apiKey, timeoutMs, wpsPin]);
+  exec(successCallback, errorCallback, "BlinkUp", "flashWPSBlinkUp", [apiKey, timeoutMs, wpsPin]);
 };
 
-Blinkup.prototype.abortBlinkUp = function (successCallback, errorCallback) {
-  argscheck.checkArgs('fF', 'Blinkup.abortBlinkUp', arguments);
-  exec(successCallback, errorCallback, "Blinkup", "abortBlinkUp", []);
+BlinkUp.prototype.abortBlinkUp = function (successCallback, errorCallback) {
+  argscheck.checkArgs('fF', 'BlinkUp.abortBlinkUp', arguments);
+  exec(successCallback, errorCallback, "BlinkUp", "abortBlinkUp", []);
 };
 
-Blinkup.prototype.clearBlinkUpData = function (successCallback, errorCallback) {
-  argscheck.checkArgs('fF', 'Blinkup.clearBlinkUpData', arguments);
-  exec(successCallback, errorCallback, "Blinkup", "clearBlinkUpData", []);
+BlinkUp.prototype.clearBlinkUpData = function (successCallback, errorCallback) {
+  argscheck.checkArgs('fF', 'BlinkUp.clearBlinkUpData', arguments);
+  exec(successCallback, errorCallback, "BlinkUp", "clearBlinkUpData", []);
 };
 
-module.exports = new Blinkup();
+module.exports = new BlinkUp();

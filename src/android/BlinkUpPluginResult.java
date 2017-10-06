@@ -15,12 +15,12 @@
  * Copyright (c) 2015 Macadamian. All rights reserved.
  */
 
-package com.macadamian.blinkup;
+package com.sensorshare.blinkup;
 
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.macadamian.blinkup.util.DebugUtils;
+import com.sensorshare.blinkup.util.DebugUtils;
 
 import org.apache.cordova.PluginResult;
 import org.json.JSONException;

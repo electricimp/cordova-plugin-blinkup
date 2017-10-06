@@ -15,7 +15,7 @@
  * Copyright (c) 2015 Macadamian. All rights reserved.
  */
 
-package com.macadamian.blinkup;
+package com.sensorshare.blinkup;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -23,10 +23,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.electricimp.blinkup.BlinkupController;
-import com.electricimp.blinkup.TokenStatusCallback;
-import com.electricimp.blinkup.TokenAcquireCallback;
 import com.electricimp.blinkup.ServerErrorHandler;
-import com.macadamian.blinkup.util.PreferencesHelper;
+import com.electricimp.blinkup.TokenAcquireCallback;
+import com.sensorshare.blinkup.util.PreferencesHelper;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -38,11 +37,13 @@ import org.json.JSONException;
  * which saves the arguments and presents the
  * BlinkUpPlugin interface from the SDK
  ********************************************/
+@SuppressWarnings("Unused")
 public class BlinkUpPlugin extends CordovaPlugin {
     private static final String TAG = "BlinkUpPlugin";
 
     private static final String START_BLINKUP = "startBlinkUp";
-    private static final String INVOKE_BLINKUP = "invokeBlinkUp";
+    private static final String FLASH_WIFI_BLINKUP = "flashWifiBlinkUp";
+    private static final String FLASH_WPS_BLINKUP = "flashWPSBlinkUp";
     private static final String ABORT_BLINKUP = "abortBlinkUp";
     private static final String CLEAR_BLINKUP_DATA = "clearBlinkUpData";
 
@@ -54,6 +55,9 @@ public class BlinkUpPlugin extends CordovaPlugin {
     private Boolean mGeneratePlanId = false;
     private Boolean mIsInDevelopment = false;
     private String mDeveloperPlanId;
+    private String mSSID;
+    private String mPassword;
+    private String mWPSPin;
 
     static final int STATUS_DEVICE_CONNECTED = 0;
     static final int STATUS_GATHERING_INFO = 200;
@@ -68,10 +72,14 @@ public class BlinkUpPlugin extends CordovaPlugin {
     static final int ERROR_JSON_ERROR = 302;          // android only
 
     // argument indexes from BlinkUp.js, the plugin's JS interface to Cordova
-    private static final int INVOKE_BLINKUP_ARG_API_KEY = 0;
-    private static final int INVOKE_BLINKUP_ARG_DEVELOPER_PLAN_ID = 1;
-    private static final int INVOKE_BLINKUP_ARG_TIMEOUT_MS = 2;
-    private static final int INVOKE_BLINKUP_ARG_GENERATE_PLAN_ID = 3;
+    private static final int WIFI_BLINKUP_ARG_API_KEY = 0;
+    private static final int WIFI_BLINKUP_ARG_TIMEOUT_MS = 1;
+    private static final int WIFI_BLINKUP_ARG_SSID = 2;
+    private static final int WIFI_BLINKUP_ARG_PASSWORD = 3;
+
+    private static final int WPS_BLINKUP_ARG_API_KEY = 0;
+    private static final int WPS_BLINKUP_ARG_TIMEOUT_MS = 1;
+    private static final int WPS_BLINKUP_ARG_PIN = 2;
 
     private static final int START_BLINKUP_ARG_API_KEY = 0;
     private static final int START_BLINKUP_ARG_DEVELOPER_PLAN_ID = 1;
@@ -89,8 +97,10 @@ public class BlinkUpPlugin extends CordovaPlugin {
 
         if (START_BLINKUP.equalsIgnoreCase(action)) {
             return startBlinkUp(activity, controller, data);
-        } else if (INVOKE_BLINKUP.equalsIgnoreCase(action)) {
-            return invokeBlinkup(activity, controller, data);
+        } else if (FLASH_WIFI_BLINKUP.equalsIgnoreCase(action)) {
+            return flashWifiBlinkUp(activity, controller, data);
+        } else if (FLASH_WPS_BLINKUP.equalsIgnoreCase(action)) {
+            return flashWPSBlinkUp(activity, controller, data);
         } else if (ABORT_BLINKUP.equalsIgnoreCase(action)) {
             return abortBlinkup(controller);
         } else if (CLEAR_BLINKUP_DATA.equalsIgnoreCase(action)) {
@@ -133,18 +143,15 @@ public class BlinkUpPlugin extends CordovaPlugin {
     }
 
     /**
-     * Old Style of BlinkUp invocation.
-     *
-     * @deprecated use {@link #startBlinkUp()} instead.
+     * Flash Wifi BlinkUp invocation.
      */
-    @Deprecated
-    private boolean invokeBlinkup(final Activity activity, final BlinkupController controller, JSONArray data) {
+    private boolean flashWifiBlinkUp(final Activity activity, final BlinkupController controller, JSONArray data) {
         int timeoutMs;
         try {
-            mApiKey = data.getString(INVOKE_BLINKUP_ARG_API_KEY);
-            mDeveloperPlanId = data.getString(INVOKE_BLINKUP_ARG_DEVELOPER_PLAN_ID);
-            timeoutMs = data.getInt(INVOKE_BLINKUP_ARG_TIMEOUT_MS);
-            mGeneratePlanId = data.getBoolean(INVOKE_BLINKUP_ARG_GENERATE_PLAN_ID);
+            mApiKey = data.getString(WIFI_BLINKUP_ARG_API_KEY);
+            timeoutMs = data.getInt(WIFI_BLINKUP_ARG_TIMEOUT_MS);
+            mSSID = data.getString(WIFI_BLINKUP_ARG_SSID);
+            mSSID = data.getString(WIFI_BLINKUP_ARG_PASSWORD);
         } catch (JSONException exc) {
             BlinkUpPluginResult.sendPluginErrorToCallback(ERROR_INVALID_ARGUMENTS);
             return false;
@@ -162,7 +169,39 @@ public class BlinkUpPlugin extends CordovaPlugin {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                presentBlinkUp(activity, controller);
+                presentWifiBlinkUp(activity, controller);
+            }
+        });
+        return true;
+    }
+
+    /**
+     * Flash Wifi BlinkUp invocation.
+     */
+    private boolean flashWPSBlinkUp(final Activity activity, final BlinkupController controller, JSONArray data) {
+        int timeoutMs;
+        try {
+            mApiKey = data.getString(WPS_BLINKUP_ARG_API_KEY);
+            timeoutMs = data.getInt(WPS_BLINKUP_ARG_TIMEOUT_MS);
+            mWPSPin = data.getString(WPS_BLINKUP_ARG_PIN);
+        } catch (JSONException exc) {
+            BlinkUpPluginResult.sendPluginErrorToCallback(ERROR_INVALID_ARGUMENTS);
+            return false;
+        }
+
+        // if api key not valid, send error message and quit
+        if (!apiKeyFormatValid()) {
+            BlinkUpPluginResult.sendPluginErrorToCallback(ERROR_INVALID_API_KEY);
+            return false;
+        }
+
+        controller.intentBlinkupComplete = createBlinkUpCompleteIntent(activity, timeoutMs);
+
+        // default is to run on WebCore thread, we have UI so need UI thread
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                presentWPSBlinkUp(activity, controller);
             }
         });
         return true;
@@ -200,7 +239,54 @@ public class BlinkUpPlugin extends CordovaPlugin {
      * shows BlinkUpPlugin activity and handles appropriate callbacks
      **********************************************************/
     private void presentBlinkUp(Activity activity, BlinkupController controller) {
+        prepareToken(activity, controller);
 
+        // send back error if connectivity issue
+        ServerErrorHandler serverErrorHandler= new ServerErrorHandler() {
+            @Override
+            public void onError(String s) {
+                BlinkUpPluginResult.sendPluginErrorToCallback(ERROR_VERIFY_API_KEY_FAIL);
+            }
+        };
+
+        controller.selectWifiAndSetupDevice(activity, mApiKey, serverErrorHandler);
+    }
+
+    /**********************************************************
+     * shows BlinkUpPlugin activity and handles appropriate callbacks
+     **********************************************************/
+    private void presentWifiBlinkUp(Activity activity, BlinkupController controller) {
+        prepareToken(activity, controller);
+
+        // send back error if connectivity issue
+        ServerErrorHandler serverErrorHandler= new ServerErrorHandler() {
+            @Override
+            public void onError(String s) {
+                BlinkUpPluginResult.sendPluginErrorToCallback(ERROR_VERIFY_API_KEY_FAIL);
+            }
+        };
+
+        controller.setupDevice(activity, mSSID, mPassword, mApiKey, serverErrorHandler);
+    }
+
+    /**********************************************************
+     * shows BlinkUpPlugin activity and handles appropriate callbacks
+     **********************************************************/
+    private void presentWPSBlinkUp(Activity activity, BlinkupController controller) {
+        prepareToken(activity, controller);
+
+        // send back error if connectivity issue
+        ServerErrorHandler serverErrorHandler= new ServerErrorHandler() {
+            @Override
+            public void onError(String s) {
+                BlinkUpPluginResult.sendPluginErrorToCallback(ERROR_VERIFY_API_KEY_FAIL);
+            }
+        };
+
+        controller.setupDevice(activity, mWPSPin, mApiKey, serverErrorHandler);
+    }
+
+    private void prepareToken(Activity activity, BlinkupController controller) {
         // show toast if can't acquire token
         final TokenAcquireCallback tokenAcquireCallback = new TokenAcquireCallback() {
             @Override
@@ -209,14 +295,6 @@ public class BlinkUpPlugin extends CordovaPlugin {
             @Override
             public void onError(String s) {
                 Log.e(TAG, s);
-            }
-        };
-
-        // send back error if connectivity issue
-        ServerErrorHandler serverErrorHandler= new ServerErrorHandler() {
-            @Override
-            public void onError(String s) {
-                BlinkUpPluginResult.sendPluginErrorToCallback(ERROR_VERIFY_API_KEY_FAIL);
             }
         };
 
@@ -235,7 +313,6 @@ public class BlinkUpPlugin extends CordovaPlugin {
         }
 
         controller.acquireSetupToken(activity, mApiKey, tokenAcquireCallback);
-        controller.selectWifiAndSetupDevice(activity, mApiKey, serverErrorHandler);
     }
 
     /**********************************************************
