@@ -1,5 +1,3 @@
-
-
 var argscheck = require('cordova/argscheck'),
     utils = require('cordova/utils'),
     exec = require('cordova/exec');
@@ -12,7 +10,7 @@ var Blinkup = function() {
  * startBlinkUp - starts the blinkup process
  * @param {module:blinkup.onSuccess} successCallback
  * @param {module:blinkup.onError} errorCallback
- * @param {module:blinkup.BlinkupOptions} options CameraOptions
+ * @param {module:blinkup.BlinkupOptions} options Blinkup Options
  */
 Blinkup.prototype.startBlinkUp = function (successCallback, errorCallback, options) {
   argscheck.checkArgs('fFO', 'Blinkup.startBlinkUp', arguments);
@@ -27,22 +25,38 @@ Blinkup.prototype.startBlinkUp = function (successCallback, errorCallback, optio
 };
 
 /**
- * invokeBlinkUp - invoke flash controller
- * @param {apiKey}: your blinkup api key
- * @param {developerPlanId}: your development plan Id. Will be disregarded when {isInDevelopment} is set to false
- * @param {isInDevelopment}: TRUE if you are connecting to development devices. when you are moving to production devices, this must be set to FALSE.
- * @param {timeoutMS}: Amount of second before the application times out. Default & Maximum value is 60000.
+ * flashWifiBlinkup - invoke flash controller for wifi
+ * @param {module:blinkup.onSuccess} successCallback
+ * @param {module:blinkup.onError} errorCallback
+ * @param {module:blinkup.BlinkupOptions} options Blinkup Options
  */
-Blinkup.prototype.invokeBlinkUp = function (successCallback, errorCallback, options) {
-  argscheck.checkArgs('fFO', 'Blinkup.invokeBlinkUp', arguments);
+Blinkup.prototype.flashWifiBlinkup = function (successCallback, errorCallback, options) {
+  argscheck.checkArgs('fFO', 'Blinkup.flashWifiBlinkup', arguments);
   options = options || {};
   var getValue = argscheck.getValue;
 
-  var apiKey = getValue(options.apiKey, "");
-  var developerPlanId = getValue(options.developerPlanId, "");
-  var isInDevelopment = !!options.isInDevelopment;
+  var apiKey = getValue(options.apiKey, '');
   var timeoutMs = getValue(options.timeoutMs, 30000);
-  exec(successCallback, errorCallback, "Blinkup", "invokeBlinkUp", [apiKey, developerPlanId, isInDevelopment, timeoutMs]);
+  var ssid = getValue(options.ssid, '');
+  var password = getValue(options.password, '');
+  exec(successCallback, errorCallback, "Blinkup", "flashWifiBlinkup", [apiKey, timeoutMs, ssid, password]);
+};
+
+/**
+ * flashWifiBlinkup - invoke flash controller for wps
+ * @param {module:blinkup.onSuccess} successCallback
+ * @param {module:blinkup.onError} errorCallback
+ * @param {module:blinkup.BlinkupOptions} options Blinkup Options
+ */
+Blinkup.prototype.flashWPSBlinkup = function (successCallback, errorCallback, options) {
+  argscheck.checkArgs('fFO', 'Blinkup.flashWPSBlinkup', arguments);
+  options = options || {};
+  var getValue = argscheck.getValue;
+
+  var apiKey = getValue(options.apiKey, '');
+  var timeoutMs = getValue(options.timeoutMs, 30000);
+  var wpsPin = getValue(options.wpsPin, '');
+  exec(successCallback, errorCallback, "Blinkup", "flashWPSBlinkup", [apiKey, timeoutMs, wpsPin]);
 };
 
 Blinkup.prototype.abortBlinkUp = function (successCallback, errorCallback) {

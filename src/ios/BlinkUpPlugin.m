@@ -44,11 +44,17 @@ typedef NS_ENUM(NSInteger, StartBlinkupArguments) {
     StartBlinkUpArgumentTimeOut,
 };
 
-typedef NS_ENUM(NSInteger, InvokeBlinkupArguments) {
-    BlinkUpArgumentApiKey = 0,
-    BlinkUpArgumentDeveloperPlanId,
-    BlinkUpArgumentTimeOut,
-    BlinkUpArgumentGeneratePlanId
+typedef NS_ENUM(NSInteger, WifiBlinkupArguments) {
+    WifiBlinkUpArgumentApiKey = 0,
+    WifiBlinkUpArgumentTimeOut,
+    WifiBlinkUpArgumentSsid,
+    WifiBlinkUpArgumentPassword
+};
+
+typedef NS_ENUM(NSInteger, WPSBlinkupArguments) {
+    WPSBlinkUpArgumentApiKey = 0,
+    WPSBlinkUpArgumentTimeOut,
+    WPSBlinkUpArgumentPin
 };
 
 @implementation BlinkUpPlugin
@@ -80,50 +86,47 @@ typedef NS_ENUM(NSInteger, InvokeBlinkupArguments) {
 /*********************************************************
  * Parses arguments from javascript and displays BlinkUp
  ********************************************************/
-- (void)invokeBlinkUp:(CDVInvokedUrlCommand*)command {
-    NSLog(@"invokeBlinkUp Started.");
+- (void)flashWifiBlinkup:(CDVInvokedUrlCommand*)command {
+    NSLog(@"flashWifiBlinkup Started.");
 
     _callbackId = command.callbackId;
 
     [self.commandDelegate runInBackground:^{
-       _apiKey = [command.arguments objectAtIndex:StartBlinkUpArgumentApiKey];
-        _developerPlanId = [command.arguments objectAtIndex:StartBlinkUpArgumentDeveloperPlanId];
-        _isInDevelopment = [[command.arguments objectAtIndex:StartBlinkUpArgumentIsInDevelopment] boolValue];
-        _timeoutMs = [[command.arguments objectAtIndex:StartBlinkUpArgumentTimeOut] integerValue];
+        _apiKey = [command.arguments objectAtIndex:WifiBlinkUpArgumentApiKey];
+        _timeoutMs = [[command.arguments objectAtIndex:WifiBlinkUpArgumentTimeOut] integerValue];
+        _ssid = [command.arguments objectAtIndex:WifiBlinkUpArgumentSsid];
+        _password = [command.arguments objectAtIndex:WifiBlinkUpArgumentPassword];
 
-        if ([self sendErrorToCallbackIfArgumentsInvalid]) {
+        if ([self sendWifiErrorToCallbackIfArgumentsInvalid]) {
             return;
         }
 
-        NSLog(@"invokeBlinkUp with timeoutMS: %ld", (long)_timeoutMs);
+        NSLog(@"flashWifiBlinkup with timeoutMS: %ld", (long)_timeoutMs);
 
-        BUNetworkConfig *networkConfig = [[BUWifiConfig alloc] initWithSSID:@"H_S_H" password:@"LEGION00"];
+        [self showFlashWifiView];
+    }];
+}
 
-        _configId = [[BUConfigId alloc] initWithApiKey:_apiKey completionHandler:^(BUConfigId *configId, NSError *error) {
-            if (error != nil) {
-                BlinkUpPluginResult *pluginResult = [[BlinkUpPluginResult alloc] init];
-                pluginResult.state = Error;
+/*********************************************************
+ * Parses arguments from javascript and displays BlinkUp
+ ********************************************************/
+- (void)flashWPSBlinkup:(CDVInvokedUrlCommand*)command {
+    NSLog(@"flashWPSBlinkup Started.");
 
-                [pluginResult setPluginError:INVALID_API_KEY];
+    _callbackId = command.callbackId;
 
-                [self sendResultToCallback:pluginResult];
+    [self.commandDelegate runInBackground:^{
+        _apiKey = [command.arguments objectAtIndex:WPSBlinkUpArgumentApiKey];
+        _timeoutMs = [[command.arguments objectAtIndex:WPSBlinkUpArgumentTimeOut] integerValue];
+        _wpsPin = [command.arguments objectAtIndex:WPSBlinkUpArgumentPin];
 
-                return;
-            }
+        if ([self sendWPSErrorToCallbackIfArgumentsInvalid]) {
+            return;
+        }
 
-            if(_flashController == nil) {
-                _flashController = [[BUFlashController alloc] init];
-            } else if(_blinkUpController != nil) {
-                _flashController = _blinkUpController.flashController;
-            }
+        NSLog(@"flashWPSBlinkup with timeoutMS: %ld", (long)_timeoutMs);
 
-            dispatch_async(dispatch_get_main_queue(), ^{
-                // present the clear device flashing screen
-                [_flashController presentFlashWithNetworkConfig:networkConfig configId:_configId animated:YES resignActive:^(BOOL willRespond, BUDevicePoller *devicePoller, NSError *error) {
-                    [self blinkUpDidComplete:false userDidCancel:false error:nil clearedCache:true];
-                }];
-            });
-        }];
+        [self showFlashWPSView];
     }];
 }
 
@@ -193,7 +196,6 @@ typedef NS_ENUM(NSInteger, InvokeBlinkupArguments) {
 
 #ifdef DEBUG
     planId = _developerPlanId;
-    _generatePlanId = false;
 #endif
 
     if (planId == _developerPlanId) {
@@ -201,7 +203,7 @@ typedef NS_ENUM(NSInteger, InvokeBlinkupArguments) {
     }
 
     if (_blinkUpController == nil) {
-        _blinkUpController = (_generatePlanId || planId == nil)
+        _blinkUpController = (planId == nil)
                                 ? [[BUBasicController alloc] initWithApiKey:_apiKey]
                                 : [[BUBasicController alloc] initWithApiKey:_apiKey planId:planId];
     }
@@ -218,6 +220,56 @@ typedef NS_ENUM(NSInteger, InvokeBlinkupArguments) {
     });
 }
 
+/*********************************************************
+ * shows default UI for wifi BlinkUp Flash process.
+ ********************************************************/
+- (void) showFlashWifiView {
+    BUNetworkConfig *networkConfig = [[BUWifiConfig alloc] initWithSSID:_ssid password:_password];
+
+    [self showFlashView:networkConfig];
+}
+
+/*********************************************************
+ * shows default UI for wifi BlinkUp Flash process.
+ ********************************************************/
+- (void) showFlashWPSView {
+    BUNetworkConfig *networkConfig = [[BUWPSConfig alloc] initWithWPSPin:_wpsPin];
+
+    [self showFlashView:networkConfig];
+}
+
+/*********************************************************
+ * shows default UI for wifi BlinkUp Flash process (inner
+ * method).
+ ********************************************************/
+- (void) showFlashView:(BUNetworkConfig *) networkConfig {
+    _configId = [[BUConfigId alloc] initWithApiKey:_apiKey completionHandler:^(BUConfigId *configId, NSError *error) {
+        if (error != nil) {
+            BlinkUpPluginResult *pluginResult = [[BlinkUpPluginResult alloc] init];
+            pluginResult.state = Error;
+
+            [pluginResult setPluginError:INVALID_API_KEY];
+
+            [self sendResultToCallback:pluginResult];
+
+            return;
+        }
+
+        if(_flashController == nil) {
+            _flashController = [[BUFlashController alloc] init];
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            // present the clear device flashing screen
+            [_flashController presentFlashWithNetworkConfig:networkConfig configId:configId animated:YES resignActive:^(BOOL willRespond, BUDevicePoller *devicePoller, NSError *error) {
+                [self blinkUpDidComplete:willRespond userDidCancel:false error:error clearedCache:false];
+                [devicePoller startPollingWithCompletionHandler:^(BUDeviceInfo *deviceInfo, BOOL timedOut, NSError *error) {
+                    [self deviceRequestDidCompleteWithDeviceInfo:deviceInfo timedOut:timedOut error:error];
+                }];
+            }];
+        });
+    }];
+}
 
 /*********************************************************
  * Called when BlinkUp controller is closed, by user
@@ -279,7 +331,7 @@ typedef NS_ENUM(NSInteger, InvokeBlinkupArguments) {
     }
     else {
         // cache plan ID if it's not development ID (see electricimp.com/docs/manufacturing/planids/)
-        if (![deviceInfo.planId isEqual: _developerPlanId]) {
+        if (![deviceInfo.planId isEqual:_developerPlanId]) {
             [[NSUserDefaults standardUserDefaults] setObject:deviceInfo.planId forKey:PLAN_ID_CACHE_KEY];
         }
 
@@ -298,7 +350,54 @@ typedef NS_ENUM(NSInteger, InvokeBlinkupArguments) {
  ********************************************************/
 - (BOOL) sendErrorToCallbackIfArgumentsInvalid {
 
-    BOOL invalidArguments = self.timeoutMs == 0 || [self.developerPlanId length] == 0;
+    BOOL invalidArguments = self.timeoutMs == 0 || (self.isInDevelopment && [self.developerPlanId length] == 0);
+    BOOL invalidApiKey = ![BlinkUpPlugin isApiKeyFormatValid:self.apiKey];
+
+    // send error to callback
+    if (invalidArguments || invalidApiKey) {
+        BlinkUpPluginResult *pluginResult = [[BlinkUpPluginResult alloc] init];
+        pluginResult.state = Error;
+
+        [pluginResult setPluginError:(invalidApiKey ? INVALID_API_KEY : INVALID_ARGUMENTS)];
+
+        [self sendResultToCallback:pluginResult];
+    }
+
+    return (invalidArguments || invalidApiKey);
+}
+
+/*********************************************************
+ * Sends error to callback if arguments don't have correct
+ * type, or if apiKey is invalid format.
+ * @return YES if error was sent, NO otherwise
+ ********************************************************/
+- (BOOL) sendWifiErrorToCallbackIfArgumentsInvalid {
+
+    BOOL invalidArguments = self.timeoutMs == 0 || [self.ssid length] == 0 || [self.password length] == 0;
+    BOOL invalidApiKey = ![BlinkUpPlugin isApiKeyFormatValid:self.apiKey];
+
+    // send error to callback
+    if (invalidArguments || invalidApiKey) {
+        BlinkUpPluginResult *pluginResult = [[BlinkUpPluginResult alloc] init];
+        pluginResult.state = Error;
+
+        [pluginResult setPluginError:(invalidApiKey ? INVALID_API_KEY : INVALID_ARGUMENTS)];
+
+        [self sendResultToCallback:pluginResult];
+    }
+
+    return (invalidArguments || invalidApiKey);
+}
+
+
+/*********************************************************
+ * Sends error to callback if arguments don't have correct
+ * type, or if apiKey is invalid format.
+ * @return YES if error was sent, NO otherwise
+ ********************************************************/
+- (BOOL) sendWPSErrorToCallbackIfArgumentsInvalid {
+
+    BOOL invalidArguments = self.timeoutMs == 0 || [self.wpsPin length] == 0;
     BOOL invalidApiKey = ![BlinkUpPlugin isApiKeyFormatValid:self.apiKey];
 
     // send error to callback

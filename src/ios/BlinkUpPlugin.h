@@ -29,6 +29,8 @@
 // perform the screen flash process to connect to an Imp
 //------------------------------------------------------
 - (void)startBlinkUp:(CDVInvokedUrlCommand *)command;
+- (void)flashWifiBlinkup:(CDVInvokedUrlCommand *)command;
+- (void)flashWPSBlinkup:(CDVInvokedUrlCommand *)command;
 - (void)abortBlinkUp:(CDVInvokedUrlCommand *)command;
 - (void)clearBlinkUpData:(CDVInvokedUrlCommand *)command;
 
@@ -38,14 +40,11 @@
 @property (strong) NSString *apiKey;
 @property (strong) NSString *callbackId;
 @property (strong) NSString *developerPlanId;
+@property (strong) NSString *ssid;
+@property (strong) NSString *password;
+@property (strong) NSString *wpsPin;
 @property (strong) BUConfigId *configId;
 @property NSInteger timeoutMs;
 @property BOOL isInDevelopment;
-
-//------------------------------------------------------
-// Deprecated Calls.
-//------------------------------------------------------
-- (void)invokeBlinkUp:(CDVInvokedUrlCommand *)command DEPRECATED_MSG_ATTRIBUTE("Use startBlinkUp: method instead.");
-@property BOOL generatePlanId DEPRECATED_ATTRIBUTE;
 
 @end
