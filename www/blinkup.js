@@ -33,7 +33,7 @@ Blinkup.prototype.startBlinkUp = function (successCallback, errorCallback, optio
  * @param {isInDevelopment}: TRUE if you are connecting to development devices. when you are moving to production devices, this must be set to FALSE.
  * @param {timeoutMS}: Amount of second before the application times out. Default & Maximum value is 60000.
  */
-Blinkup.prototype.invokeBlinkUp: function (successCallback, errorCallback, apiKey, developerPlanId, timeoutMs, generateNewPlanId) {
+Blinkup.prototype.invokeBlinkUp = function (successCallback, errorCallback, apiKey, developerPlanId, timeoutMs, generateNewPlanId) {
   argscheck.checkArgs('fFO', 'Blinkup.invokeBlinkUp', arguments);
   options = options || {};
   var getValue = argscheck.getValue;
@@ -45,12 +45,12 @@ Blinkup.prototype.invokeBlinkUp: function (successCallback, errorCallback, apiKe
   exec(successCallback, errorCallback, "Blinkup", "invokeBlinkUp", [apiKey, developerPlanId, isInDevelopment, timeoutMs]);
 };
 
-Blinkup.prototype.abortBlinkUp: function (successCallback, errorCallback) {
+Blinkup.prototype.abortBlinkUp = function (successCallback, errorCallback) {
   argscheck.checkArgs('fF', 'Blinkup.abortBlinkUp', arguments);
   exec(successCallback, errorCallback, "Blinkup", "abortBlinkUp", []);
 };
 
-Blinkup.prototype.clearBlinkUpData: function (successCallback, errorCallback) {
+Blinkup.prototype.clearBlinkUpData = function (successCallback, errorCallback) {
   argscheck.checkArgs('fF', 'Blinkup.clearBlinkUpData', arguments);
   exec(successCallback, errorCallback, "Blinkup", "clearBlinkUpData", []);
 };
