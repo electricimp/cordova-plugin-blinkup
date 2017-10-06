@@ -22,16 +22,14 @@
     version="1.0.0">
     <name>Blinkup Plugin</name>
     <description>Cordova Electric Imp Blinkup Plugin</description>
-    <license>Private</license>
+    <license>Apache 2.0 License</license>
     <keywords>cordova,blinkup</keywords>
 
     <engines>
       <engine name="cordova" version=">=3.4.0" />
     </engines>
 
-    <asset src="www/blinkup.js" target="js/blinkup.js"/>
-
-    <js-module src="www/blinkup.js" name="blinkup">
+    <js-module src="www/blinkup.js" name="Blinkup">
       <clobbers target="blinkup" />
     </js-module>
 
@@ -84,6 +82,7 @@
       <config-file target="config.xml" parent="/*">
         <feature name="Blinkup">
             <param name="ios-package" value="BlinkUpPlugin" />
+            <param name="onload" value="true" />
         </feature>
         <preference name="DisallowOverscroll" value="true" />
       </config-file>
