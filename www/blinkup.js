@@ -33,7 +33,7 @@ Blinkup.prototype.startBlinkUp = function (successCallback, errorCallback, optio
  * @param {isInDevelopment}: TRUE if you are connecting to development devices. when you are moving to production devices, this must be set to FALSE.
  * @param {timeoutMS}: Amount of second before the application times out. Default & Maximum value is 60000.
  */
-Blinkup.prototype.invokeBlinkUp: function (apiKey, developerPlanId, timeoutMs, generateNewPlanId, successCallback, errorCallback) {
+Blinkup.prototype.invokeBlinkUp: function (successCallback, errorCallback, apiKey, developerPlanId, timeoutMs, generateNewPlanId) {
   argscheck.checkArgs('fFO', 'Blinkup.invokeBlinkUp', arguments);
   options = options || {};
   var getValue = argscheck.getValue;
