@@ -5,8 +5,6 @@ This Cordova / Phonegap plugin allows you to easily integrate the native BlinkUp
 
 Integrate your application with this plugin directly from the command line using `cordova plugin add cordova-plugin-blinkup`.
 
-A sample Cordova app that demonstrates how to integrate the plugin can be found at https://github.com/Macadamian/Cordova-BlinkUpSample.
-
 ## Table of Contents
 
 **[Installation](#installation)**<br>
@@ -29,6 +27,8 @@ iOS
 --------------
 **REQUIREMENTS**<br>
 * XCode 8+
+* Electric Imp iOS SDK 19.7+
+* Electric Imp Android 6.1+
 
 **STEP 1**<br>
 Open `/path/to/project/platforms/ios/<ProjectName>.xcworkspace` in Xcode, select the "Frameworks" group and choose File > Add Files to \<ProjectName\>. Select the `BlinkUp.embeddedframework` file given to you by Electric Imp, and ensure that both "*Copy items if needed*" and "*Add to targets: \<ProjectName\>*" are selected.
@@ -48,24 +48,37 @@ Copy the `blinkup.aar` file from the SDK package given to you by Electric Imp to
 
 NOTES:
 
-MainActivity.java and AndroidManifest.xml will be injected with blinkup specific code when the android platform is added via a cordova hooks
+MainActivity.java and AndroidManifest.xml will be injected with blinkup specific code when the android platform is added via a cordova hooks.
 
 Using the Plugin
 ==========
-When you are adding calls to the plugin in your javascript note that you must update `www/js/index.js`, `platforms/ios/www/js/index.js`, and `platforms/android/assets/www/js/index.js`. If you are making frequent changes, you may want to include a build step that copies the root `www` files to the platform-specific folders.
+When you are adding calls to the plugin in your javascript note that you must update `platforms/ios/www/js/index.js`, and `platforms/android/assets/www/js/index.js`. If you are making frequent changes, you may want to include a build step that copies the root `www` files to the platform-specific folders.
 
 API Calls
 ----------
-There are three calls from the plugin exposed to the javascript through the `blinkup` interface. For example, to show a BlinkUp you would call `blinkup.startBlinkUp(...);`.
+There are 4 calls from the plugin exposed to the javascript through the `blinkup` interface. For example, to show a BlinkUp you would call `blinkup.startBlinkUp(...);`.
 
 All calls take success and failure callbacks as arguments. See the "Callbacks" section below for more information.
 
-**startBlinkUp(apiKey, planId, timeoutMs, generateNewPlanId, success, failure)**<br>
-Presents the native BlinkUp interface, where user can input wifi info and connect to the Imp.<br>
+**startBlinkUp(success, failure, options)**<br>
+Presents the native BlinkUp interface, where user can input wifi info and connect to the Imp. The options object has the following properties:<br>
 `apiKey` *string*: you must enter your apiKey or the plugin won't function.<br>
 `developmentPlanId` *string, default=""*: **IMPORTANT** - you must read "[Testing the Plugin](#testing-the-plugin)" before setting this value. Failure to do so can prevent users from connecting to wifi.<br>
 `isInDevelopment` *boolean, default=false*: TRUE if you are connecting to development devices. when you are moving to production devices, this must be set to FALSE.<br>
 `timeoutMs` *integer, default=30000*: how long to wait for device info from servers.<br>
+
+**flashWifiBlinkUp(success, failure, wifiOptions)**<br>
+Presents the native Flashing BlinkUp interface. The wifi options object has the following properties:<br>
+`apiKey` *string*: you must enter your apiKey or the plugin won't function.<br>
+`timeoutMs` *integer, default=30000*: how long to wait for device info from servers.<br>
+`ssid` *string*: the network Wifi SSID<br>
+`passowrd` *string*: the network Wifi password<br>
+
+**flashWPSBlinkUp(success, failure, wifiOptions)**<br>
+Presents the native Flashing BlinkUp interface. The wps options object has the following properties:<br>
+`apiKey` *string*: you must enter your apiKey or the plugin won't function.<br>
+`timeoutMs` *integer, default=30000*: how long to wait for device info from servers.<br>
+`wpsPin` *string*: the network Wifi WPS Pin<br>
 
 **abortBlinkUp(success, failure)**<br>
 Cancels server polling for device info if in progress.
@@ -199,3 +212,10 @@ Troubleshooting
 **Javascript gives "blinkup not defined"**
 - There is a typo in the function being called, or it is not one of the exposed functions outlined in [api calls](#api-calls)
 - The function being called is not called on a `blinkup` object, as discussed in [api calls](#api-calls)
+
+Acknowledgments
+==============
+
+This plugin was based on the Cordova plugin developed in https://github.com/Macadamian/Cordova-BlinkUpPlugin.
+
+Modifications were made to allow usage with Ionic Framework and to have Wifi/WPS form pages as pure HTML.
