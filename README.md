@@ -28,7 +28,7 @@ iOS
 **REQUIREMENTS**<br>
 * XCode 8+
 * Electric Imp iOS SDK 19.7+
-* Electric Imp Android 6.1+
+* Electric Imp Android SDK 6.1+
 
 **STEP 1**<br>
 Open `/path/to/project/platforms/ios/<ProjectName>.xcworkspace` in Xcode, select the "Frameworks" group and choose File > Add Files to \<ProjectName\>. Select the `BlinkUp.embeddedframework` file given to you by Electric Imp, and ensure that both "*Copy items if needed*" and "*Add to targets: \<ProjectName\>*" are selected.
