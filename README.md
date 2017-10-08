@@ -67,14 +67,14 @@ Presents the native BlinkUp interface, where user can input wifi info and connec
 `isInDevelopment` *boolean, default=false*: TRUE if you are connecting to development devices. when you are moving to production devices, this must be set to FALSE.<br>
 `timeoutMs` *integer, default=30000*: how long to wait for device info from servers.<br>
 
-**flashWifiBlinkUp(success, failure, wifiOptions)**<br>
+**flashWifiBlinkUp(success, failure, options)**<br>
 Presents the native Flashing BlinkUp interface. The wifi options object has the following properties:<br>
 `apiKey` *string*: you must enter your apiKey or the plugin won't function.<br>
 `timeoutMs` *integer, default=30000*: how long to wait for device info from servers.<br>
 `ssid` *string*: the network Wifi SSID<br>
 `passowrd` *string*: the network Wifi password<br>
 
-**flashWPSBlinkUp(success, failure, wifiOptions)**<br>
+**flashWPSBlinkUp(success, failure, options)**<br>
 Presents the native Flashing BlinkUp interface. The wps options object has the following properties:<br>
 `apiKey` *string*: you must enter your apiKey or the plugin won't function.<br>
 `timeoutMs` *integer, default=30000*: how long to wait for device info from servers.<br>
