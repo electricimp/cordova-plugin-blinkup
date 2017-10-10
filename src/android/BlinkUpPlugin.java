@@ -151,7 +151,7 @@ public class BlinkUpPlugin extends CordovaPlugin {
             mApiKey = data.getString(WIFI_BLINKUP_ARG_API_KEY);
             timeoutMs = data.getInt(WIFI_BLINKUP_ARG_TIMEOUT_MS);
             mSSID = data.getString(WIFI_BLINKUP_ARG_SSID);
-            mSSID = data.getString(WIFI_BLINKUP_ARG_PASSWORD);
+            mPassword = data.getString(WIFI_BLINKUP_ARG_PASSWORD);
         } catch (JSONException exc) {
             BlinkUpPluginResult.sendPluginErrorToCallback(ERROR_INVALID_ARGUMENTS);
             return false;
