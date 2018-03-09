@@ -57,7 +57,6 @@
         <activity android:name="com.sensorshare.blinkup.ClearCompleteActivity" android:configChanges="orientation" android:screenOrientation="portrait" />
         <activity android:name="com.sensorshare.blinkup.BlinkUpCompleteActivity" android:configChanges="orientation" android:screenOrientation="portrait" />
         <activity android:name="com.electricimp.blinkup.WifiSelectActivity" android:label="BlinkUp" android:configChanges="orientation" android:screenOrientation="portrait" />
-        <activity android:name="com.electricimp.blinkup.BlinkupGLActivity" android:label="BlinkUp" />
         <activity android:name="com.electricimp.blinkup.WifiActivity" android:label="BlinkUp" android:configChanges="orientation" android:screenOrientation="portrait" />
         <activity android:name="com.electricimp.blinkup.WPSActivity" android:label="BlinkUp" android:configChanges="orientation" android:screenOrientation="portrait" />
         <activity android:name="com.electricimp.blinkup.ClearWifiActivity" android:label="BlinkUp" android:configChanges="orientation" android:screenOrientation="portrait" />
