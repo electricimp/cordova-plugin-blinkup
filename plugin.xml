@@ -53,16 +53,6 @@
         <uses-permission android:name="android.permission.WAKE_LOCK" />
       </config-file>
 
-      <config-file target="AndroidManifest.xml" parent="/manifest/application">
-        <activity android:name="com.sensorshare.blinkup.ClearCompleteActivity" android:configChanges="orientation" android:screenOrientation="portrait" />
-        <activity android:name="com.sensorshare.blinkup.BlinkUpCompleteActivity" android:configChanges="orientation" android:screenOrientation="portrait" />
-        <activity android:name="com.electricimp.blinkup.WifiSelectActivity" android:label="BlinkUp" android:configChanges="orientation" android:screenOrientation="portrait" />
-        <activity android:name="com.electricimp.blinkup.WifiActivity" android:label="BlinkUp" android:configChanges="orientation" android:screenOrientation="portrait" />
-        <activity android:name="com.electricimp.blinkup.WPSActivity" android:label="BlinkUp" android:configChanges="orientation" android:screenOrientation="portrait" />
-        <activity android:name="com.electricimp.blinkup.ClearWifiActivity" android:label="BlinkUp" android:configChanges="orientation" android:screenOrientation="portrait" />
-        <activity android:name="com.electricimp.blinkup.InterstitialActivity" android:label="BlinkUp" android:configChanges="orientation" android:screenOrientation="portrait" />
-      </config-file>
-
       <framework src="src/android/build-extras.gradle" custom="true" type="gradleReference" />
 
       <source-file src="src/android/BlinkUpPlugin.java" target-dir="src/com/sensorshare/blinkup/" />
