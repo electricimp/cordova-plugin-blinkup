@@ -1,5 +1,4 @@
-Introduction
-==============
+## Introduction
 
 This Cordova / Phonegap plugin allows you to easily integrate the native BlinkUp process to connect an Electric Imp device to the internet in your app. Note that because the BlinkUp SDK is private, you will need to add it to your project after installing the plugin. If you do not have access to the BlinkUp SDK, you may contact Electric Imp at sales@electricimp.com.
 
@@ -7,24 +6,24 @@ Integrate your application with this plugin directly from the command line using
 
 ## Table of Contents
 
-**[Installation](#installation)**<br>
-&nbsp;&nbsp;&nbsp;&nbsp;[iOS](#ios)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;[Android](#android)<br>
-**[Using the Plugin](#using-the-plugin)**<br>
-&nbsp;&nbsp;&nbsp;&nbsp;[API Calls](#api-calls)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;[Callbacks](#callbacks)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;[Testing the Plugin](#testing-the-plugin)<br>
-**[JSON Format](#json-format)**<br>
-&nbsp;&nbsp;&nbsp;&nbsp;[Status Codes](#status-codes)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;[Error Codes](#error-codes)<br>
-**[Troubleshooting](#troubleshooting)**
+* [Installation](#installation)
+    * [iOS](#ios)<br>
+    * [Android](#android)<br>
+* [Using the Plugin](#using-the-plugin)
+    * [API Calls](#api-calls)
+    * [Callbacks](#callbacks)
+    * [Testing the Plugin](#testing-the-plugin)
+* [JSON Format](#json-format)
+    * [Status Codes](#status-codes)
+    * [Error Codes](#error-codes)
+* [Troubleshooting](#troubleshooting)
 
-Installation
-==============
+## Installation
+
 Navigate to your project directory and install the plugin with `cordova plugin add cordova-plugin-blinkup`. Add both platforms if you haven't already with `cordova platform add ios` and `cordova platform add android`.
 
-iOS
---------------
+### iOS
+
 **REQUIREMENTS**<br>
 * XCode 8+
 * Electric Imp iOS SDK 19.7+
@@ -41,22 +40,20 @@ Go to the project's Build Setting in Xcode, and in the `Apple LLVM - Preprocessi
 DEBUG=1
 ```
 
-Android
---------------
+### Android
+
 **STEP 1**<br>
 Copy the `blinkup.aar` file from the SDK package given to you by Electric Imp to `/path/to/project/platforms/android/libs`.
 
-NOTES:
+**Note** `MainActivity.java` and `AndroidManifest.xml` will be injected with blinkup specific code when the android platform is added via a cordova hooks.
 
-MainActivity.java and AndroidManifest.xml will be injected with blinkup specific code when the android platform is added via a cordova hooks.
+## Using the Plugin
 
-Using the Plugin
-==========
 When you are adding calls to the plugin in your javascript note that you must update `platforms/ios/www/js/index.js`, and `platforms/android/assets/www/js/index.js`. If you are making frequent changes, you may want to include a build step that copies the root `www` files to the platform-specific folders.
 
-API Calls
-----------
-There are 4 calls from the plugin exposed to the javascript through the `blinkup` interface. For example, to show a BlinkUp you would call `blinkup.startBlinkUp(...);`.
+## API Calls
+
+There are four calls from the plugin exposed to the javascript through the `blinkup` interface. For example, to show a BlinkUp you would call `blinkup.startBlinkUp(...);`.
 
 All calls take success and failure callbacks as arguments. See the "Callbacks" section below for more information.
 
@@ -86,8 +83,8 @@ Cancels server polling for device info if in progress.
 **clearBlinkUpData(success, failure)**<br>
 Immediately initiates the BlinkUp flashing process that will clear the imp's wifi info. Also clears the cached planId if there is one.
 
-Callbacks
-----------
+## Callbacks
+
 It is recommended to use the same function as the success callback and failure callback, as the JSON parsing will be common to both. See the "JSON format" section for information regarding the JSON sent back to the javascript.
 
 An example callback function is below, where `errorForCode` and `statusForCode` are functions you must define that map [error codes](#error-codes) and [status codes](#status-codes) to their respective messages.
@@ -125,16 +122,16 @@ var callback = function (message) {
 };
 ```
 
-Testing the Plugin
------------
+## Testing the Plugin
+
 If you are testing devices for development, you can input your own development planID to see the Imps in the Electric Imp IDE. Just set it in the `index.js` files when making a call to `startBlinkUp` and ensure you pass *true* for `isInDevelopment`.
 
 When you pass in a development plan ID, the plugin will not cache it. Caching is only done on production plan ID's, and is used to save user settings across BlinkUp's (e.g. when they change their wifi password).
 
 IMPORTANT NOTE: if a development plan ID makes it into production, the consumer's device will not configure, and will be unable to connect to wifi. There is a check in the native code on each platform which will ignore a development plan ID if the build configuration is set to release, but it is best to remove all references to the plan ID and pass an empty string from the Javascript when you're done debugging. Please read http://electricimp.com/docs/manufacturing/planids/ for more info.
 
-JSON Format
-===========
+## JSON Format
+
 The plugin will return a JSON string in the following format. Footnotes in square brackets.
 ```
 {
@@ -162,8 +159,8 @@ The plugin will return a JSON string in the following format. Footnotes in squar
 [6] - If errorType is "blinkup", error message from BlinkUp SDK. Null if errorType "plugin"<br>
 [7] - Stores the deviceInfo from the Electric Imp servers. Null if state is "started" or "error"
 
-Status Codes
------------
+## Status Codes
+
 These codes can be used to debug your application, or to present the users an appropriate message on success.
 ```
 0   - "Device Connected"
@@ -184,22 +181,24 @@ IMPORTANT NOTE: the following codes apply ONLY if `errorType` is "plugin". Error
 302 - "Error generating JSON string."
 ```
 
-Troubleshooting
-==========
-###iOS
-**BlinkUp/BlinkUp.h cannot be found**
+## Troubleshooting
+
+### iOS
+ **BlinkUp/BlinkUp.h cannot be found**
 - `BlinkUp.embeddedframework` is not in `path/to/project/platforms/ios/`
 - `BlinkUp.framework` is not in the project's "Link binary with libraries" build phase
 - "Framework Search Paths" in the project's build settings does not include `$(PROJECT_DIR)/BlinkUp.embeddedframework`
 - If the three conditions above are correct and it still does not work, try removing the BlinkUp.framework from "Link binary with librairies" and re-adding it. This is a bug in Xcode.
 
-###Android
+### Android
+
 **Project with path "blinkup_sdk" could not be found**
 - The `blinkup_sdk` folder is not in `path/to/project/platforms/android/`
 - The `build.js` file was not updated as outlined in [installation](#android)
 - `cordova build android` was not run after updating the `build.js` file
 
-###BlinkUp
+### BlinkUp
+
 **BlinkUp process times out**
 - Lighting significantly affects the BlinkUp process. It doesn't need to be pitch black to connect, but try to find somewhere out of the way of any direct light sources, or try to cover the imp with your hands. Setting your phone's screen brightness to the max might help.
 - The network name and password are incorrect
@@ -213,9 +212,8 @@ Troubleshooting
 - There is a typo in the function being called, or it is not one of the exposed functions outlined in [api calls](#api-calls)
 - The function being called is not called on a `blinkup` object, as discussed in [api calls](#api-calls)
 
-Acknowledgments
-==============
+## Acknowledgments
 
-This plugin was based on the Cordova plugin developed in https://github.com/Macadamian/Cordova-BlinkUpPlugin.
+This plugin was based on the Cordova plugin developed by Macadamian (https://github.com/Macadamian/Cordova-BlinkUpPlugin) and modified by SensorShare (https://github.com/SensorShare/cordova-plugin-blinkup)
 
-Modifications were made to allow usage with Ionic Framework and to have Wifi/WPS form pages as pure HTML.
+Modifications were made to allow usage with Ionic Framework and to have WiFi/WPS form pages as pure HTML.
