@@ -1,9 +1,6 @@
-How to Contribute
-================
+# How to Contribute
 
 Contribute to this project by forking the repository and creating pull requests. You can also contribute by logging issues in this repository.
-
-Forking both `https://github.com/Macadamian/Cordova-BlinkUpSample` and `https://github.com/Macadamian/Cordova-BlinkUpPlugin` is recommended. Note that `BlinkUpSample` should only contain UI contributions. Plugin fixes belong in `BlinkUpPlugin`.
 
 1. When you have a fork, start working on a topic branch based on your own private fork.
     a. Ensure you follow the process as referred in https://help.github.com/articles/syncing-a-fork/
@@ -15,11 +12,11 @@ Forking both `https://github.com/Macadamian/Cordova-BlinkUpSample` and `https://
 5. Someone will look at the Pull Request, ask questions, and address any feedback.
 6. When we are comfortable with your patch, we will merge it in the repository!
 
+## Requirements
 
-What we will not do
-==================
-Provide you with a BlinkUp SDK, or API Keys. You need to reach out to Electric Imp to get this.
+BlinkUp requires use of the BlinkUp SDK and a BlinkUp API Key. The SDK can be downloaded from https://developer.electricimp.com/blinkup/sdk
+When you become an Electric Imp Customer, you will receive your BlinkUp API Key.
 
-Missing Features
-=================
-The API currently does not offer a mechanism to do custom branded blinkup screens.
+## Missing Features
+
+The API currently does not offer a mechanism to do custom-branded BlinkUp screens.

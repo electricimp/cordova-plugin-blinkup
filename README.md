@@ -1,10 +1,10 @@
 ## Introduction
 
-This Cordova / Phonegap plugin allows you to easily integrate the native BlinkUp process to connect an Electric Imp device to the internet in your app. Note that because the BlinkUp SDK is private, you will need to add it to your project after installing the plugin. If you do not have access to the BlinkUp SDK, you may contact Electric Imp at sales@electricimp.com.
+This Cordova/Phonegap plug-in allows you to easily integrate the native BlinkUp™ process to connect an Electric Imp device to the Internet in your app. Note that because the BlinkUp SDK is private, you will need to add it to your project after installing the plug-in.
 
-Integrate your application with this plugin directly from the command line using `cordova plugin add cordova-plugin-blinkup`.
+Integrate your application with this plug-in directly from the command line using `cordova plugin add cordova-plugin-blinkup`.
 
-## Table of Contents
+## Contents
 
 * [Installation](#installation)
     * [iOS](#ios)<br>
@@ -20,74 +20,99 @@ Integrate your application with this plugin directly from the command line using
 
 ## Installation
 
-Navigate to your project directory and install the plugin with `cordova plugin add cordova-plugin-blinkup`. Add both platforms if you haven't already with `cordova platform add ios` and `cordova platform add android`.
+Navigate to your project directory and install the plug-in with `cordova plugin add cordova-plugin-blinkup`. Add both platforms if you haven’t already with `cordova platform add ios` and `cordova platform add android`.
 
 ### iOS
 
-**REQUIREMENTS**<br>
+#### Requirements ####
+
 * XCode 8+
-* Electric Imp iOS SDK 19.7+
-* Electric Imp Android SDK 6.1+
+* Electric Imp iOS SDK 20+
 
-**STEP 1**<br>
-Open `/path/to/project/platforms/ios/<ProjectName>.xcworkspace` in Xcode, select the "Frameworks" group and choose File > Add Files to \<ProjectName\>. Select the `BlinkUp.embeddedframework` file given to you by Electric Imp, and ensure that both "*Copy items if needed*" and "*Add to targets: \<ProjectName\>*" are selected.
+#### STEP 1 ####
 
-Expand the `BlinkUp.embeddedframework` you just added to Frameworks, and drag the `BlinkUp.framework` file  to `Link Binary with Libraries`, and `BlinkUp.bundle` (in BlinkUp.embeddedframework/Resources) to the `Copy Bundle Resources` in the project's `Build Phases`.
+Open `/path/to/project/platforms/ios/<ProjectName>.xcworkspace` in Xcode, select the **Frameworks** group and choose **File > Add Files to \<ProjectName\>**. Select the `BlinkUp.embeddedframework` file given to you by Electric Imp, and ensure that both "*Copy items if needed*" and "*Add to targets: \<ProjectName\>*" are selected.
 
-**STEP 2**<br>
-Go to the project's Build Setting in Xcode, and in the `Apple LLVM - Preprocessing` section expand the "Preprocessor Macros" setting. Add the following to "Debug" (and only Debug!):
+Expand the `BlinkUp.embeddedframework` you just added to Frameworks, and drag the `BlinkUp.framework` file  to `Link Binary with Libraries`, and `BlinkUp.bundle` (in `BlinkUp.embeddedframework/Resources`) to the `Copy Bundle Resources` in the project's `Build Phases`.
+
+#### STEP 2 ####
+
+Go to the project’s Build Setting in Xcode, and in the `Apple Clang - Preprocessing` section expand the "Preprocessor Macros" setting. Add the following to **Debug** (and only Debug!):
+
 ```
 DEBUG=1
 ```
 
 ### Android
 
-**STEP 1**<br>
+#### Requirements ####
+
+* Electric Imp Android SDK 6.4.3+
+
+#### STEP 1
+
 Copy the `blinkup.aar` file from the SDK package given to you by Electric Imp to `/path/to/project/platforms/android/libs`.
 
-**Note** `MainActivity.java` and `AndroidManifest.xml` will be injected with blinkup specific code when the android platform is added via a cordova hooks.
+**Note** The files `MainActivity.java` and `AndroidManifest.xml` will be injected with BlinkUp-specific code when the Android platform is added via a cordova hooks.
 
-## Using the Plugin
+## Using the Plug-in
 
-When you are adding calls to the plugin in your javascript note that you must update `platforms/ios/www/js/index.js`, and `platforms/android/assets/www/js/index.js`. If you are making frequent changes, you may want to include a build step that copies the root `www` files to the platform-specific folders.
+When you are adding calls to the plug-in in your javascript note that you must update `platforms/ios/www/js/index.js`, and `platforms/android/assets/www/js/index.js`. If you are making frequent changes, you may want to include a build step that copies the root `www` files to the platform-specific folders.
 
 ## API Calls
 
-There are four calls from the plugin exposed to the javascript through the `blinkup` interface. For example, to show a BlinkUp you would call `blinkup.startBlinkUp(...);`.
+There are four calls from the plug-in exposed to the javascript through the `blinkup` interface. For example, to perform BlinkUp you would call `blinkup.startBlinkUp(...);`.
 
-All calls take success and failure callbacks as arguments. See the "Callbacks" section below for more information.
+All calls take success and failure callbacks as arguments. See the [**Callbacks**](#callbacks) section below for more information.
 
-**startBlinkUp(success, failure, options)**<br>
-Presents the native BlinkUp interface, where user can input wifi info and connect to the Imp. The options object has the following properties:<br>
-`apiKey` *string*: you must enter your apiKey or the plugin won't function.<br>
-`developmentPlanId` *string, default=""*: **IMPORTANT** - you must read "[Testing the Plugin](#testing-the-plugin)" before setting this value. Failure to do so can prevent users from connecting to wifi.<br>
-`isInDevelopment` *boolean, default=false*: TRUE if you are connecting to development devices. when you are moving to production devices, this must be set to FALSE.<br>
-`timeoutMs` *integer, default=30000*: how long to wait for device info from servers.<br>
+#### startBlinkUp(success, failure, options) ####
 
-**flashWifiBlinkUp(success, failure, options)**<br>
-Presents the native Flashing BlinkUp interface. The wifi options object has the following properties:<br>
-`apiKey` *string*: you must enter your apiKey or the plugin won't function.<br>
-`timeoutMs` *integer, default=30000*: how long to wait for device info from servers.<br>
-`ssid` *string*: the network Wifi SSID<br>
-`passowrd` *string*: the network Wifi password<br>
+Presents the native BlinkUp interface, where user can input WiFi info and connect to the imp. The *options* object has the following properties:
 
-**flashWPSBlinkUp(success, failure, options)**<br>
-Presents the native Flashing BlinkUp interface. The wps options object has the following properties:<br>
-`apiKey` *string*: you must enter your apiKey or the plugin won't function.<br>
-`timeoutMs` *integer, default=30000*: how long to wait for device info from servers.<br>
-`wpsPin` *string*: the network Wifi WPS Pin<br>
+| Property | Type | Description |
+| --- | --- | --- |
+| *apiKey* | String | You must enter your API key or the plug-in won't function |
+| *developmentPlanId* | String | **IMPORTANT** You must read [**Testing the Plug-in**](#testing-the-plug-in) before setting this value. Failure to do so can prevent users from connecting to WiFi. Default: "" |
+| *isInDevelopment* | Boolean | Set to `true` if you are connecting to development devices. when you are moving to production devices, this must be set to `false`. Default: `false` |
+| *timeoutMs* | Integer | How long to wait for device info from servers in ms. Default: 30000 |
 
-**abortBlinkUp(success, failure)**<br>
-Cancels server polling for device info if in progress.
+#### flashWifiBlinkUp(success, failure, options)
 
-**clearBlinkUpData(success, failure)**<br>
-Immediately initiates the BlinkUp flashing process that will clear the imp's wifi info. Also clears the cached planId if there is one.
+Presents the native BlinkUp flashing interface pre-set for SSID/password usage. The *options* object has the following properties:
+
+| Property | Type | Description |
+| --- | --- | --- |
+| *apiKey* | String | You must enter your API key or the plug-in won't function |
+| *timeoutMs* | Integer | How long to wait for device info from servers in ms. Default: 30000 |
+| *ssid* | String | The WiFi SSID. Must not be empty |
+| *password* | String | The WiFi password. May be empty. Default: `""` |
+
+#### flashWPSBlinkUp(success, failure, options)
+
+Presents the native BlinkUp flashing interface pre-set for WPS usage. The *options* object has the following properties:
+
+| Property | Type | Description |
+| --- | --- | --- |
+| *apiKey* | String | You must enter your API key or the plug-in won't function |
+| *timeoutMs* | Integer | How long to wait for device info from servers in ms. Default: 30000 |
+| *wpsPin* | String | The WiFi WPS PIN. Must not be empty |
+
+#### abortBlinkUp(success, failure)
+
+Cancels server polling for device info if it is in progress.
+
+#### clearBlinkUpData(success, failure)
+
+Immediately initiates the BlinkUp flashing sequence that will clear the imp’s stored WiFi credentials and cached plan ID if there is one.
 
 ## Callbacks
 
-It is recommended to use the same function as the success callback and failure callback, as the JSON parsing will be common to both. See the "JSON format" section for information regarding the JSON sent back to the javascript.
+It is recommended that you use the same function as both the success callback and the failure callback, as the JSON parsing will be common to both. See the [**JSON format**](#json-format) section for information regarding the JSON sent back to the JavaScript.
 
-An example callback function is below, where `errorForCode` and `statusForCode` are functions you must define that map [error codes](#error-codes) and [status codes](#status-codes) to their respective messages.
+### Example ###
+
+In the following callback example, *errorForCode()* and *statusForCode()* are functions you must define to map [error codes](#error-codes) and [status codes](#status-codes) to their respective messages.
+
 ```javascript
 var callback = function (message) {
     try {
@@ -122,17 +147,18 @@ var callback = function (message) {
 };
 ```
 
-## Testing the Plugin
+## Testing the Plug-in
 
-If you are testing devices for development, you can input your own development planID to see the Imps in the Electric Imp IDE. Just set it in the `index.js` files when making a call to `startBlinkUp` and ensure you pass *true* for `isInDevelopment`.
+If you are testing during development, you can input your own development plan ID to add the device to your development account and see the Electric Imp IDE. Just set it in the `index.js` files when making a call to `startBlinkUp` and ensure you pass *true* for `isInDevelopment`.
 
-When you pass in a development plan ID, the plugin will not cache it. Caching is only done on production plan ID's, and is used to save user settings across BlinkUp's (e.g. when they change their wifi password).
+When you pass in a development plan ID, the plug-in will not cache it across BlinkUp operations. Caching only occurs with production plan IDs. It is used to ensure that if a given end-user reconfigures their device, user settings (stored on a per-agent ID basis) are not lost (because the device will get a new agent ID).
 
-IMPORTANT NOTE: if a development plan ID makes it into production, the consumer's device will not configure, and will be unable to connect to wifi. There is a check in the native code on each platform which will ignore a development plan ID if the build configuration is set to release, but it is best to remove all references to the plan ID and pass an empty string from the Javascript when you're done debugging. Please read http://electricimp.com/docs/manufacturing/planids/ for more info.
+**IMPORTANT NOTE** If a development plan ID makes it into production, the end-user’s device will not configure, and will be unable to connect to WiFi. There is a check in the native code on each platform which will ignore a development plan ID if the build configuration is set to release, but it is best to remove all references to the plan ID and pass an empty string from the Javascript when you’re done debugging. Please read https://developer.electricimp.com/manufacturing/publiccloudplanids for more info.
 
-## JSON Format
+## JSON Format ##
 
-The plugin will return a JSON string in the following format. Footnotes in square brackets.
+The plug-in will return a JSON string in the following format. Footnotes in square brackets.
+
 ```
 {
     "state": "started" | "completed" | "error", [1]
@@ -150,18 +176,20 @@ The plugin will return a JSON string in the following format. Footnotes in squar
     }
  }
 ```
-[1] - *started*: flashing process has finished, waiting for device info from Electric Imp servers<br>
-*completed*: Plugin done executing. This could be a clear-wifi completed or device info from servers has arrived<br>
-[2] - Status of plugin. Null if state is "error". See "Status Codes" below for status codes<br>
-[3] - Stores error information if state is "error". Null if state is "started" or "completed"<br>
-[4] - If error sent from SDK, "blinkup". If error handled within native code of plugin, "plugin"<br>
-[5] - BlinkUp SDK error code if errorType is "blinkup". Custom error code if "plugin". See "Error Codes" below for custom error codes.<br>
-[6] - If errorType is "blinkup", error message from BlinkUp SDK. Null if errorType "plugin"<br>
-[7] - Stores the deviceInfo from the Electric Imp servers. Null if state is "started" or "error"
+
+[1] - *started*: the flashing process has finished; waiting for device info from Electric Imp servers<br>
+*completed*: Plug-in completed executing.: either WiFi settings have been cleared or device info has been received<br>
+[2] - Status of plugin. `null` if *state* is `"error"`. See [**Status Codes**](#status-codes) for details<br>
+[3] - Stores error information if *state* is `"error"`. `null` if *state* is `"started"` or `"completed"`<br>
+[4] - If the error was issued by the SDK, `"blinkup"`. If the error was issued by the plug-in, `"plugin"`<br>
+[5] - BlinkUp SDK error code if *errorType* is `"blinkup"`, or a custom error code if `"plugin"`. See [**Error Codes**](#error-codes) for details<br>
+[6] - If *errorType* is `"blinkup"`, the error message from the BlinkUp SDK, otherwise `null`<br>
+[7] - Stores the device info record from the Electric Imp servers. `null` if *state* is `"started"` or `"error"`
 
 ## Status Codes
 
 These codes can be used to debug your application, or to present the users an appropriate message on success.
+
 ```
 0   - "Device Connected"
 200 - "Gathering device info..."
@@ -169,9 +197,9 @@ These codes can be used to debug your application, or to present the users an ap
 202 - "Wireless configuration and cached Plan ID cleared."
 ```
 
-Error Codes
-----------
-IMPORTANT NOTE: the following codes apply ONLY if `errorType` is "plugin". Errors from the BlinkUp SDK will have their own error codes (which may overlap with those below). If `errorType` is "blinkup", you must use the `errorMsg` field instead. The errors in the 300's range are android only.
+## Error Codes
+
+**IMPORTANT NOTE** The following codes apply only if *errorType* is `"plugin"`. Errors from the BlinkUp SDK will have their own error codes (which may overlap with those below). If *errorType* is `"blinkup"`, you must use the *errorMsg* field instead. The errors in the 300- range are Android only.
 ```
 100 - "Invalid arguments in call to startBlinkUp."
 101 - "Could not gather device info. Process timed out."
@@ -184,36 +212,40 @@ IMPORTANT NOTE: the following codes apply ONLY if `errorType` is "plugin". Error
 ## Troubleshooting
 
 ### iOS
- **BlinkUp/BlinkUp.h cannot be found**
-- `BlinkUp.embeddedframework` is not in `path/to/project/platforms/ios/`
-- `BlinkUp.framework` is not in the project's "Link binary with libraries" build phase
-- "Framework Search Paths" in the project's build settings does not include `$(PROJECT_DIR)/BlinkUp.embeddedframework`
-- If the three conditions above are correct and it still does not work, try removing the BlinkUp.framework from "Link binary with librairies" and re-adding it. This is a bug in Xcode.
+
+#### BlinkUp/BlinkUp.h cannot be found
+
+- `BlinkUp.embeddedframework` is not in `path/to/project/platforms/ios/`.
+- `BlinkUp.framework` is not in the project’s "Link binary with libraries" build phase.
+- "Framework Search Paths" in the project’s build settings does not include `$(PROJECT_DIR)/BlinkUp.embeddedframework`.
+- If the three conditions above are correct and it still does not work, try removing the BlinkUp.framework from "Link binary with libraries" and re-adding it. This is a bug in Xcode.
 
 ### Android
 
-**Project with path "blinkup_sdk" could not be found**
-- The `blinkup_sdk` folder is not in `path/to/project/platforms/android/`
-- The `build.js` file was not updated as outlined in [installation](#android)
-- `cordova build android` was not run after updating the `build.js` file
+#### Project with path "blinkup_sdk" could not be found
+
+- The `blinkup_sdk` folder is not in `path/to/project/platforms/android/`.
+- The `build.js` file was not updated as outlined in [installation](#android).
+- `cordova build android` was not run after updating the `build.js` file.
 
 ### BlinkUp
 
-**BlinkUp process times out**
-- Lighting significantly affects the BlinkUp process. It doesn't need to be pitch black to connect, but try to find somewhere out of the way of any direct light sources, or try to cover the imp with your hands. Setting your phone's screen brightness to the max might help.
-- The network name and password are incorrect
-- The Imp was moved, or was not pressed right up against the phone for the duration of the BlinkUp
+#### BlinkUp process times out
 
-**Imp is not lit up, and won't react to the BlinkUp process**
-- The USB power cable is not connected to the Imp, or to a power source
-- Sometimes you need to unplug and replug in the power cable to "wake" the Imp up. This should get it to start flashing, and ready to recognize a BlinkUp
+- Lighting significantly affects the BlinkUp process. It doesn't need to be pitch black to connect, but try to find somewhere out of the way of any direct light sources, or try to cover the imp with your hands. Setting your phone’s screen brightness to the max might help.
+- The network name and/or password are incorrect.
+- The imp was moved, or was not held close enough to the phone for the duration of the BlinkUp.
 
-**Javascript gives "blinkup not defined"**
-- There is a typo in the function being called, or it is not one of the exposed functions outlined in [api calls](#api-calls)
-- The function being called is not called on a `blinkup` object, as discussed in [api calls](#api-calls)
+#### imp is not lit up, and won't react to the BlinkUp process
+
+- The USB power cable is not connected to the imp, or to a power source.
+- The imp powers down the BlinkUp system 60s after power-up. If the status LED is not flashing, the BlinkUp system is powered down, so just power-cycle the imp.
+
+#### Javascript gives "blinkup not defined"
+
+- There is a typo in the function being called, or it is not one of the exposed functions outlined in [**API Calls**](#api-calls).
+- The function being called is not called on a `blinkup` instance, as discussed in [**API Calls**](#api-calls).
 
 ## Acknowledgments
 
-This plugin was based on the Cordova plugin developed by Macadamian (https://github.com/Macadamian/Cordova-BlinkUpPlugin) and modified by SensorShare (https://github.com/SensorShare/cordova-plugin-blinkup)
-
-Modifications were made to allow usage with Ionic Framework and to have WiFi/WPS form pages as pure HTML.
+This plug-in was based on the Cordova plug-in originally developed by Macadamian (https://github.com/Macadamian/Cordova-BlinkUpPlugin) and subsequently modified by SensorShare (https://github.com/SensorShare/cordova-plugin-blinkup). Modifications were made to allow usage with Ionic Framework and to have WiFi/WPS form pages as pure HTML.
