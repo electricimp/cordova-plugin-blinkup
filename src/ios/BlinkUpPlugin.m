@@ -373,7 +373,7 @@ typedef NS_ENUM(NSInteger, WPSBlinkUpArguments) {
  ********************************************************/
 - (BOOL) sendWifiErrorToCallbackIfArgumentsInvalid {
 
-    BOOL invalidArguments = self.timeoutMs == 0 || [self.ssid length] == 0 || [self.password length] == 0;
+    BOOL invalidArguments = self.timeoutMs == 0 || [self.ssid length] == 0;
     BOOL invalidApiKey = ![BlinkUpPlugin isApiKeyFormatValid:self.apiKey];
 
     // send error to callback
