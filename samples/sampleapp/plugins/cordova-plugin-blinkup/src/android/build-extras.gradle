@@ -1,0 +1,10 @@
+repositories { flatDir { dirs 'libs' } }
+
+dependencies {
+  compile(name:'blinkup', ext:'aar')
+  compile 'com.google.code.gson:gson:2.8.2'
+  compile 'com.squareup.retrofit2:converter-moshi:2.4.0'
+  compile 'com.squareup.retrofit2:retrofit:2.4.0'
+  compile 'com.squareup.retrofit2:converter-gson:2.4.0'
+  compile 'com.squareup.okhttp3:okhttp:3.10.0'
+}

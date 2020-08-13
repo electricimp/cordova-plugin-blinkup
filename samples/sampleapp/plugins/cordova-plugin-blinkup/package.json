@@ -1,0 +1,61 @@
+{
+  "_from": "git+https://github.com/electricimp/cordova-plugin-blinkup.git#develop",
+  "_id": "cordova-plugin-blinkup@1.3.0",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/cordova-plugin-blinkup",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "https://github.com/electricimp/cordova-plugin-blinkup#develop",
+    "rawSpec": "https://github.com/electricimp/cordova-plugin-blinkup#develop",
+    "saveSpec": "git+https://github.com/electricimp/cordova-plugin-blinkup.git#develop",
+    "fetchSpec": "https://github.com/electricimp/cordova-plugin-blinkup.git",
+    "gitCommittish": "develop"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "git+https://github.com/electricimp/cordova-plugin-blinkup.git#cc3c37269dd5c92998aed698a5a883c2c7fb33af",
+  "_spec": "https://github.com/electricimp/cordova-plugin-blinkup#develop",
+  "_where": "/Users/tsmith/GitHub/cordova-plugin-blinkup/samples/sampleapp",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/electricimp/cordova-plugin-blinkup.git"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "com.electricimp.blinkup",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "deprecated": false,
+  "description": "This plugin allows you to integrate the native BlinkUp process for setting up an Electric Imp device directly into your Cordova / PhoneGap project",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.4.0"
+    }
+  ],
+  "homepage": "https://github.com/electricimp/cordova-plugin-blinkup#readme",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "plugin",
+    "electric",
+    "imp",
+    "iot",
+    "blinkup"
+  ],
+  "license": "Apache 2.0",
+  "name": "cordova-plugin-blinkup",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/electricimp/cordova-plugin-blinkup.git"
+  },
+  "version": "1.3.0"
+}

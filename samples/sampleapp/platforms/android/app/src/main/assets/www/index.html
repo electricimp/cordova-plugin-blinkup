@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+
+ Modified by Stuart Douglas (sdouglas@macadamian.com) on June 11, 2015.
+ Modified bt Tony Smith (tsmith@twilio.com) on August 13, 2020.
+
+ -->
+<html>
+    <head>
+        <!--
+         Customize this policy to fit your own app's needs. For more guidance, see:
+         https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+         Some notes:
+         * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+         * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+         * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+         * Enable inline JS: add 'unsafe-inline' to default-src
+         -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <title>Electric Imp BlinkUp™ Plugin Sample</title>
+    </head>
+
+    <body>
+        <div id="view-firstlaunch" class="l-body v-firstlaunch">
+            <div class="l-header">BlinkUp Plugin Sample</div>
+            <div class="l-content">
+                <div class="message">
+                    <p>
+                        This sample app shows off how to integrate the BlinkUp process with a Cordova/Phonegap application. It makes use of the BlinkUp Cordova plugin to interface with the BlinkUp SDK.
+                    </p>
+                </div>
+                <div class="warning">
+                    <p>CAUTION</p>
+                    <p>
+                        BlinkUp uses flashing light patterns. Please note that a very small percentage of individuals may experience epileptic seizures when exposed to such light patterns or flashing lights. If you have an epileptic condition, consult your physician prior to using this app to BlinkUp a device.
+                    </p>
+                </div>
+                <div class="actions">
+                    <div id="continue-button" class="m-button">Continue</div>
+                </div>
+                <br/><br/>
+            </div>
+        </div>
+
+        <div id="view-main" class="l-body v-main">
+            <div class="l-header">BlinkUp Plugin Sample</div>
+            <div class="l-content">
+                <div class="m-message-center">
+                    <div id="status-success" class="status-success"></div>
+                    <div id="status-error" class="status-error"></div>
+                    <div id="status-gathering" class="status-gathering">
+                        <img src="img/loading.gif" />
+                        <span>Gathering device information</span>
+                    </div>
+                    <div id="deviceready" class="device-ready">
+                        <p class="event listening">Connecting to Device</p>
+                        <p class="event received">Device is Ready</p>
+                    </div>
+                </div>
+                <div id="device-info-header" class="device-info-header">
+                    Paired Device:
+                </div>
+                <ul id="device-info" class="device-info">
+                    <li>
+                        <div>Plan ID:</div>
+                        <div id="planId"></div>
+                    </li>
+                    <li>
+                        <div>Device ID:</div>
+                        <div id="deviceId"></div>
+                    </li>
+                    <li>
+                        <div>Agent URL:</div>
+                        <div id="agentURL"></div>
+                    </li>
+                    <li>
+                        <div>Verification Date:</div>
+                        <div id="verificationDate"></div>
+                    </li>
+                </ul>
+                <div id="no-device-info" class="no-device-info">
+                    You do not have a paired Electric Imp yet. :(
+                </div>
+
+                <div class="actions">
+                    <div id="abort-button" class="m-button" style="display: none;">Cancel BlinkUp</div>
+                    <div id="blinkup-button" class="m-button">Pair with BlinkUp</div>
+                    <div id="clear-button" class="m-button m-button-negative">Unpair with BlinkUp &amp; Clear Cache</div>
+                </div>
+                <br/><br/>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/blinkupconfig.js"></script>
+    </body>
+
+</html>

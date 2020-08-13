@@ -20,7 +20,7 @@ Integrate your application with this plug-in directly from the command line usin
 
 ## Installation
 
-Navigate to your project directory and install the plug-in with `cordova plugin add https://github.com/electricimp/cordova-plugin-blinkup`. Add both platforms if you haven’t already with `cordova platform add ios` and `cordova platform add android`.
+Navigate to your project directory and install the plug-in with `cordova plugin add cordova-plugin-blinkup`. Add both platforms if you haven’t already with `cordova platform add ios` and `cordova platform add android`.
 
 ### iOS
 
